@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App Chat</title>
+    <%- include('../partial/head')%>
+</head>
+<body>
+    <div class="container h-100 d-flex flex-column">
+        <div class="chat-container">
+            
+        </div>
+        <div class="message-typing">
+            <div class="input-group">
+                <input id="txtMessage" type="text" class="form-control" placeholder="Typing some text to send...">
+                <div class="input-group-append">
+                    <button id="btnSend" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('../partial/footer')%>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        
+        $('#btnSend').on('click', () => {
+            let $message = $('#txtMessage');
+            socket.emit('new message', $message.val());
+            console.log('send: ', $message.val());
+            $message.val('');
+        });
+        let $chatContainer = $('.chat-container');
+        socket.on('new message', arg => {
+              $chatContainer.append(`<p>${arg}</p>`)  
+        })
+    </script>
+</body>
+</html>
