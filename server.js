@@ -4,6 +4,11 @@ const http = require('http');
 const server = http.createServer(app);
 
 const router = require('./src/router');
+
+//body parser
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 // Socket.io
 const io = require('socket.io')(server);
 require('./src/socket')(io);

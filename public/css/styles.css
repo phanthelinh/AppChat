@@ -8,8 +8,45 @@ html, body {
 
 .chat-container {
     height: 100%;
-    border: 1px solid #eceff1
-
-    ;
+    border: 1px solid #eceff1;
     margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+}
+
+.my-text {
+    text-align: right;
+    color: white;
+    border: 1px solid blue;
+    background-color: blue;
+    border-radius: 7px;
+    padding: 4px 8px;
+    width: fit-content;
+    max-width: 80%;
+    float: right;
+    margin-bottom: 5px;
+    margin-left: auto;
+}
+
+.their-text {
+    text-align: left;
+    border: 1px solid #eee;
+    background-color: #eee;
+    border-radius: 7px;
+    padding: 4px 8px;
+    max-width: 80%;
+    width: fit-content;
+    float: left;
+    margin-bottom: 5px;
+}
+
+.user-list {
+    width: 20%;
+}
+
+.chat-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
 }

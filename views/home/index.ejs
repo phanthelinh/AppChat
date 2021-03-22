@@ -8,15 +8,19 @@
     <%- include('../partial/head')%>
 </head>
 <body>
-    <div class="container h-100 d-flex flex-column">
-        <div class="chat-container">
-            
+    <div class="container h-100 d-flex">
+        <div class="user-list">
+            <div class="user">Nguoi dung 1</div>
         </div>
-        <div class="message-typing">
-            <div class="input-group">
-                <input id="txtMessage" type="text" class="form-control" placeholder="Typing some text to send...">
-                <div class="input-group-append">
-                    <button id="btnSend" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+        <div class="chat-wrapper">
+            <div class="chat-container">
+            </div>
+            <div class="message-typing">
+                <div class="input-group">
+                    <input id="txtMessage" type="text" class="form-control" placeholder="Typing some text to send...">
+                    <div class="input-group-append">
+                        <button id="btnSend" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -25,16 +29,21 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
     <script>
-        
+        let myId = new URLSearchParams(window.location.search).get('id');
         $('#btnSend').on('click', () => {
             let $message = $('#txtMessage');
-            socket.emit('new message', $message.val());
-            console.log('send: ', $message.val());
+            let obj = {
+                id: myId,
+                message: $message.val()
+            };
+            socket.emit('new message', obj);
+            console.log('send: ', obj);
+            // Reset the text input
             $message.val('');
         });
         let $chatContainer = $('.chat-container');
-        socket.on('new message', arg => {
-              $chatContainer.append(`<p>${arg}</p>`)  
+        socket.on('new message', messageObj => {
+            addMessage(myId, messageObj, $chatContainer);
         })
     </script>
 </body>

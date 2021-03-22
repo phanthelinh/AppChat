@@ -1,5 +1,5 @@
 //Prefix Path: /home
-const home = require('express')();
+const home = require('express').Router();
 
 
 home.get('/', (req, res) => {
