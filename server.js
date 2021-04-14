@@ -13,6 +13,9 @@ app.use(express.urlencoded({extended: true}));
 const io = require('socket.io')(server);
 require('./src/socket')(io);
 
+//Mongo
+require('./src/mongodb');
+
 //set static path
 app.use(express.static(__dirname + '/public'));
 //set view engine
