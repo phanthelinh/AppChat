@@ -16,10 +16,11 @@
             <div class="chat-container">
             </div>
             <div class="message-typing">
+                <input hidden name="senderId" value="<%= user._id%>"/>
                 <div class="input-group">
-                    <input id="txtMessage" type="text" class="form-control" placeholder="Typing some text to send...">
+                    <input id="txtMessage" name="message" type="text" class="form-control" placeholder="Typing some text to send...">
                     <div class="input-group-append">
-                        <button id="btnSend" class="btn btn-outline-primary"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+                        <button id="btnSend" class="btn btn-outline-primary" type="submit"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
                     </div>
                 </div>
             </div>
@@ -29,21 +30,21 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
     <script>
-        let myId = new URLSearchParams(window.location.search).get('id');
+        let user = <%- user%>
         $('#btnSend').on('click', () => {
             let $message = $('#txtMessage');
             let obj = {
-                id: myId,
+                senderId: user._id,
+                senderDisplayName: user.displayName,
                 message: $message.val()
             };
             socket.emit('new message', obj);
-            console.log('send: ', obj);
             // Reset the text input
             $message.val('');
         });
         let $chatContainer = $('.chat-container');
         socket.on('new message', messageObj => {
-            addMessage(myId, messageObj, $chatContainer);
+            addMessage(user._id, messageObj, $chatContainer);
         })
     </script>
 </body>

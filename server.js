@@ -2,12 +2,16 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 const router = require('./src/router');
 
 //body parser
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(cors());
+app.use(cookieParser());
 
 // Socket.io
 const io = require('socket.io')(server);

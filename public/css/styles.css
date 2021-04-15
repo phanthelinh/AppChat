@@ -29,6 +29,19 @@ html, body {
     margin-left: auto;
 }
 
+.their-text-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.circle {
+    padding: 4px 15px;
+    border-radius: 50%;
+    border: 1px solid #d7ccc8;
+    background-color: #d7ccc8;
+    margin-right: 10px;
+}
+
 .their-text {
     text-align: left;
     border: 1px solid #eee;
