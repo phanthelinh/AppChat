@@ -56,10 +56,47 @@ html, body {
 
 .user-list {
     width: 20%;
+    border-left: 1px solid #eceff1;
+}
+
+.user:last-child {
+    border-bottom: 1px solid #bdbdbd;
+}
+
+.user {
+    border-top: 1px solid #bdbdbd;
+    border-bottom: transparent;
+    padding: 5px;;
+    text-decoration: none;
+    color: #757575;
+    background-color: #fff;
+    display: inline-block;
+    width: 100%;
+}
+
+.user:hover {
+    text-decoration: none;
+    background-color: #757575;
+    color: #fff;
 }
 
 .chat-wrapper {
     display: flex;
     flex-direction: column;
     width: 80%;
+}
+
+.chat-title {
+    border-left: 1px solid #eceff1;
+    border-right: 1px solid #eceff1;
+    padding: 5px;
+    color: #000;
+    background-color: #bdbdbd;
+}
+
+.no-user-online {
+    color: #bcbcbc;
+    font-size: 10pt;
+    font-style: italic;
+    padding: 10px;
 }

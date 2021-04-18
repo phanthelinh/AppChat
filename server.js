@@ -4,6 +4,7 @@ const http = require('http');
 const server = http.createServer(app);
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const moment = require('moment');
 
 const router = require('./src/router');
 
@@ -12,6 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors());
 app.use(cookieParser());
+
+//set to locals for ejs using
+app.locals.moment = moment;
 
 // Socket.io
 const io = require('socket.io')(server);

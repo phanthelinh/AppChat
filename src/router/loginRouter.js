@@ -34,6 +34,11 @@ login.post('/', async (req, res) => {
             if (helper.verifyPassword(body.password, foundExistUser.password)) {
                 //init access_token
                 auth.setToken(res, foundExistUser);
+                //add to online list if it does not exist
+                let existLoggedIn = helper.onlineList.find(x => x._id === foundExistUser._id);
+                if (!existLoggedIn) {
+                    helper.onlineList.push(foundExistUser);
+                }
                 //valid user
                 res.redirect('/home');
             } else {

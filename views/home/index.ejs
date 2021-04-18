@@ -9,43 +9,88 @@
 </head>
 <body>
     <div class="container h-100 d-flex">
-        <div class="user-list">
-            <div class="user">Nguoi dung 1</div>
-        </div>
-        <div class="chat-wrapper">
-            <div class="chat-container">
+        <% if (typeof error !== 'undefined') { %>
+            <%= error%>
+        <% } else { %>
+            <div class="user-list">
+                <a class="user" href="#">Nguoi dung 1</a>
             </div>
-            <div class="message-typing">
-                <input hidden name="senderId" value="<%= user._id%>"/>
-                <div class="input-group">
-                    <input id="txtMessage" name="message" type="text" class="form-control" placeholder="Typing some text to send...">
-                    <div class="input-group-append">
-                        <button id="btnSend" class="btn btn-outline-primary" type="submit"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+            <div class="chat-wrapper">
+                <div class="chat-title"><%= title %></div>
+                <div class="chat-container">
+                </div>
+                <div class="message-typing">
+                    <input hidden name="senderId" value="<%= user._id%>"/>
+                    <div class="input-group">
+                        <input id="txtMessage" name="message" type="text" class="form-control" placeholder="Typing some text to send...">
+                        <div class="input-group-append">
+                            <button id="btnSend" class="btn btn-outline-primary" type="submit"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        <% } %>
     </div>
     <%- include('../partial/footer')%>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/main.js"></script>
+    <script src="/js/main.js"></script>
     <script>
-        let user = <%- user%>
-        $('#btnSend').on('click', () => {
-            let $message = $('#txtMessage');
-            let obj = {
-                senderId: user._id,
-                senderDisplayName: user.displayName,
-                message: $message.val()
-            };
-            socket.emit('new message', obj);
-            // Reset the text input
-            $message.val('');
-        });
-        let $chatContainer = $('.chat-container');
-        socket.on('new message', messageObj => {
-            addMessage(user._id, messageObj, $chatContainer);
-        })
+        //get id of private chat
+        var privateId = window.location.pathname.substr(5).trim().replace('/', '');
+        <% if (typeof user !== 'undefined') { %>
+            let user = <%- user%>;
+            let receiver = {};
+            <% if (typeof receiverUser !== 'undefined') { %>
+                receiver = <%- receiverUser%>;
+            <% } %>
+            // on click and enter
+            function SendMessage () {
+                let $message = $('#txtMessage');
+                let obj = {
+                    senderId: user._id,
+                    senderDisplayName: user.displayName,
+                    receiverId: receiver._id,
+                    message: $message.val()
+                };
+                socket.emit('new message', obj);
+                // Reset the text input
+                $message.val('');
+            }
+            $('#btnSend').on('click', () => {
+                SendMessage();
+            });
+            $('#txtMessage').on('keyup', e => {
+                if (e.key === 'Enter') {
+                    SendMessage();
+                }
+            });
+            let $chatContainer = $('.chat-container');
+            socket.on('new message', messageObj => {
+                addMessage(user._id, messageObj, $chatContainer, privateId);
+            });
+            // send online list
+            <% if (typeof onlineList !== 'undefined')  { %>
+                let $userList = $('.user-list');
+                let onlineList = [<%- onlineList%>];
+                if (onlineList) {
+                    socket.emit('user join', onlineList);
+                    socket.on('user join', obj => {
+                        drawUserList(obj, $userList, user._id);
+                    })
+                }
+            <% } %>
+        <% } %>
+    </script>
+    <script>
+        //load old messages
+        <% if (typeof oldMessages !== 'undefined' && typeof user !== 'undefined' && typeof receiverUser !== 'undefined') { %>
+            let oldMessages = <%- oldMessages%>;
+            // let $chatContainer = $('.chat-container');
+            oldMessages.forEach(msg => {
+                msg.senderDisplayName = user.displayName;
+                addMessage(user._id, msg, $chatContainer, privateId);
+            });
+        <% } %>
     </script>
 </body>
 </html>
