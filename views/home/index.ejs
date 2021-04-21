@@ -20,13 +20,21 @@
                 <div class="chat-container">
                 </div>
                 <div class="message-typing">
-                    <input hidden name="senderId" value="<%= user._id%>"/>
-                    <div class="input-group">
-                        <input id="txtMessage" name="message" type="text" class="form-control" placeholder="Typing some text to send...">
-                        <div class="input-group-append">
-                            <button id="btnSend" class="btn btn-outline-primary" type="submit"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+                    <form id="formsubmit" enctype="multipart/form-data">
+                        <input hidden name="senderId" value="<%= user._id%>"/>
+                        <div class="media-attach-area">
+                            <input id="fileBrowse" type="file" onchange="readURL(this);" hidden name="photo" accept="image/gif, image/jpeg, image/png"/>
+                            <div onclick="imageClick()" class="btn image-btn-attach"><i class="fas fa-image" style="color: #17a2b8;"></i></div>
+                            <div id="filechosenname"></div>
+                            <img id="blah" src="#" alt="your image" width="50" height="50"/>
                         </div>
-                    </div>
+                        <div class="input-group">
+                            <input id="txtMessage" name="message" type="text" class="form-control" style="color: #0d47a1;" placeholder="Typing some text to send...">
+                            <div class="input-group-append">
+                                <button id="btnSend" class="btn btn-outline-primary" type="submit"><i class="fas fa-paper-plane"></i>&nbsp;Send</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         <% } %>
@@ -37,6 +45,9 @@
     <script>
         //get id of private chat
         var privateId = window.location.pathname.substr(5).trim().replace('/', '');
+        var imageEncoded = '';
+        var attachType = '';
+        $('#blah').hide();
         <% if (typeof user !== 'undefined') { %>
             let user = <%- user%>;
             let receiver = {};
@@ -50,20 +61,32 @@
                     senderId: user._id,
                     senderDisplayName: user.displayName,
                     receiverId: receiver._id,
+                    senderAttach: imageEncoded,
+                    attachType: attachType,
                     message: $message.val()
                 };
                 socket.emit('new message', obj);
                 // Reset the text input
                 $message.val('');
+                $('#blah').hide();
+                imageEncoded = '';
+                attachType = '';
             }
-            $('#btnSend').on('click', () => {
+            // $('#btnSend').on('click', () => {
+            //     console.log('call 2')
+            //     SendMessage();
+            // });
+            // $('#txtMessage').on('keyup', e => {
+            //     if (e.key === 'Enter') {
+            //         SendMessage();
+            //     }
+            // });
+
+            $('#formsubmit').on('submit', e => {
                 SendMessage();
+                e.preventDefault();
             });
-            $('#txtMessage').on('keyup', e => {
-                if (e.key === 'Enter') {
-                    SendMessage();
-                }
-            });
+
             let $chatContainer = $('.chat-container');
             socket.on('new message', messageObj => {
                 addMessage(user._id, messageObj, $chatContainer, privateId);
@@ -86,11 +109,34 @@
         <% if (typeof oldMessages !== 'undefined' && typeof user !== 'undefined' && typeof receiverUser !== 'undefined') { %>
             let oldMessages = <%- oldMessages%>;
             // let $chatContainer = $('.chat-container');
+            console.log(oldMessages);
             oldMessages.forEach(msg => {
                 msg.senderDisplayName = user.displayName;
                 addMessage(user._id, msg, $chatContainer, privateId);
             });
         <% } %>
+    </script>
+    <script>
+        function imageClick() {
+            $('#fileBrowse').trigger('click');
+        }
+
+        function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                imageEncoded = e.target.result;
+                attachType = input.files[0].type;
+                let imgSource = 'data:'+ attachType + ';base64,' + _arrayBufferToBase64(imageEncoded);
+                $('#blah')
+                    .attr('src', imgSource)
+                    .width(150)
+                    .height(150)
+                    .show();
+            };
+            reader.readAsArrayBuffer(input.files[0]);
+        }
+    }
     </script>
 </body>
 </html>

@@ -4,7 +4,8 @@ const uuid = require('uuid');
 const messageSchema = new Schema({
     _id: {type: String, default: uuid.v4},
     senderId: {type: String, required: true},
-    senderAttach: {type: String},
+    senderAttach: {type: Buffer},
+    attachType: {type: String},
     receiverId: {type: String, required: true},
     message: {type: String, required: true},
     datetime: {type: Date, required: true, default: new Date()}

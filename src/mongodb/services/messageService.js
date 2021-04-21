@@ -21,10 +21,12 @@ exports.getMessagesById = async (senderId, receiverId) => {
     return messages;
 }
 
-exports.saveMessages = async message => {
+exports.saveMessages = async messageObj => {
     let newMessage = Messages({
         senderId: messageObj.senderId,
         receiverId: messageObj.receiverId,
+        senderAttach: messageObj.senderAttach,
+        attachType: messageObj.attachType,
         message: messageObj.message
     });
 

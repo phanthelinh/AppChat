@@ -54,21 +54,25 @@ html, body {
     margin-bottom: 5px;
 }
 
+.their-text > img, .my-text > img {
+    max-width: 250px;
+}
+
 .user-list {
     width: 20%;
     border-left: 1px solid #eceff1;
 }
 
 .user:last-child {
-    border-bottom: 1px solid #bdbdbd;
+    border-bottom: 1px solid #81d4fa;
 }
 
 .user {
-    border-top: 1px solid #bdbdbd;
+    border-top: 1px solid #81d4fa;
     border-bottom: transparent;
     padding: 5px;;
     text-decoration: none;
-    color: #757575;
+    color: #01579b;
     background-color: #fff;
     display: inline-block;
     width: 100%;
@@ -76,7 +80,7 @@ html, body {
 
 .user:hover {
     text-decoration: none;
-    background-color: #757575;
+    background-color: #0d47a1;
     color: #fff;
 }
 
@@ -90,8 +94,9 @@ html, body {
     border-left: 1px solid #eceff1;
     border-right: 1px solid #eceff1;
     padding: 5px;
-    color: #000;
-    background-color: #bdbdbd;
+    color: #fff;
+    background-color: #17a2b8;
+    text-align: center;
 }
 
 .no-user-online {
@@ -99,4 +104,20 @@ html, body {
     font-size: 10pt;
     font-style: italic;
     padding: 10px;
+}
+
+.media-attach-area {
+    margin-bottom: 10px;
+}
+
+.image-btn-attach {
+    border: 1px solid #007bff;
+}
+
+input[id="txtMessage"]::placeholder {
+    color:#007bff;
+}
+
+input[id="txtMessage"] {
+    border: 1px solid #007bff;
 }
